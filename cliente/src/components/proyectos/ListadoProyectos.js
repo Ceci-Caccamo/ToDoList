@@ -13,7 +13,7 @@ const ListadoProyectos = () => {
   }, []);
 
   //revisar si el state inicial tiene contenido.
-  if (proyectos.length === 0) return null;
+  if (proyectos.length === 0) return <p>No hay proyectos, comienza creando uno.</p>;
 
   return (
     <div>
