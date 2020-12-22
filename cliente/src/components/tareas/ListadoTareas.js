@@ -2,11 +2,17 @@ import React, { Fragment, useContext } from "react";
 import Tarea from "./Tarea";
 
 import proyectoContext from "../../context/proyectos/proyectoContext";
+import tareaContext from "../../context/tareas/tareaContext";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const ListadoTareas = () => {
   //Extraer proyectos del state inicial
   const proyectosContext = useContext(proyectoContext);
   const { proyecto, eliminarProyecto } = proyectosContext;
+
+  //Obtener las tareas del proyecto
+  const tareasContext = useContext(tareaContext);
+  const { tareasproyecto } = tareasContext;
 
   //Si no hay proyecto seleccionado
   if (!proyecto) {
@@ -16,31 +22,34 @@ const ListadoTareas = () => {
   //Array destructuring para extraer el proyecto actual
   const [proyectoActual] = proyecto;
 
-  const tareasProyectos = [
-    { nombre: "Elegir Plataforma", estado: true },
-    { nombre: "Elegir Colores", estado: false },
-    { nombre: "Elegir Plataformas de pago", estado: false },
-    { nombre: "Elegir Hosting", estado: true },
-  ];
-
   //elimina un proyecto
   const onClickEliminar = () => {
     eliminarProyecto(proyectoActual.id);
   };
-
-  
 
   return (
     <Fragment>
       <h2>Proyecto: {proyectoActual.nombre}</h2>
 
       <ul className="listado-tareas">
-        {tareasProyectos.length === 0 ? (
+        {tareasproyecto.length === 0 ? (
           <li className="tarea">
             <p>No hay Tareas</p>
           </li>
         ) : (
-          tareasProyectos.map((tarea) => <Tarea tarea={tarea} />)
+          <TransitionGroup>
+            {tareasproyecto.map(tarea => (
+              <CSSTransition 
+              key={tarea.id}
+              timeout={200}
+              classNames="tarea"
+              >
+                <Tarea 
+                tarea={tarea} 
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         )}
       </ul>
       <button
