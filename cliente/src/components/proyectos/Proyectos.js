@@ -4,7 +4,9 @@ import Barra from "../layout/Barra";
 import FormTarea from "../tareas/FormTarea";
 import ListadoTareas from "../tareas/ListadoTareas";
 
+
 const Proyectos = () => {
+  
   return (
     <div className="contenedor-app">
       <SideBar />

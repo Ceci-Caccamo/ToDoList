@@ -1,16 +1,19 @@
 import React, { useReducer } from "react";
 
+import { v4 as uuidv4 } from "uuid";
+
 import proyectoContext from "./proyectoContext";
 import proyectoReducer from "./proyectoReducer";
-import { 
-  FORMULARIO_PROYECTO, 
-  OBTENER_PROYECTO
- } from "../../types";
-
-
+import {
+  FORMULARIO_PROYECTO,
+  OBTENER_PROYECTO,
+  AGREGAR_PROYECTO,
+  VALIDAR_FORMULARIO,
+  PROYECTO_ACTUAL,
+  ELIMINAR_PROYECTO,
+} from "../../types";
 
 const ProyectoState = (props) => {
-
   const proyectos = [
     { id: 1, nombre: "Tienda Virtual" },
     { id: 2, nombre: "Intranet" },
@@ -21,6 +24,8 @@ const ProyectoState = (props) => {
   const inicialState = {
     proyectos: [],
     formulario: false,
+    errorformulario: false,
+    proyecto: null,
   };
 
   //Dispatch para ejecutar las acciones
@@ -41,13 +46,54 @@ const ProyectoState = (props) => {
     });
   };
 
+  //Agregar nuevo Proyecto
+
+  const agregarProyecto = (proyecto) => {
+    proyecto.id = uuidv4();
+
+    //agregamos el proyecto en el state
+    dispatch({
+      type: AGREGAR_PROYECTO,
+      payload: proyecto,
+    });
+  };
+
+  //Validar el Formulario por errores
+  const mostrarError = () => {
+    dispatch({
+      type: VALIDAR_FORMULARIO,
+    });
+  };
+
+  //Selecciona el Proyecto que el usuario dió CLICK
+  const proyectoActual = (proyectoId) => {
+    dispatch({
+      type: PROYECTO_ACTUAL,
+      payload: proyectoId,
+    });
+  };
+
+  //Elimina un proyecto
+  const eliminarProyecto = (proyectoId) => {
+    dispatch({
+      type: ELIMINAR_PROYECTO,
+      payload:proyectoId
+    });
+  };
+
   return (
     <proyectoContext.Provider
       value={{
         proyectos: state.proyectos,
         formulario: state.formulario,
+        errorformulario: state.errorformulario,
+        proyecto: state.proyecto,
         mostrarFormulario,
-        obtenerProyectos
+        obtenerProyectos,
+        agregarProyecto,
+        mostrarError,
+        proyectoActual,
+        eliminarProyecto,
       }}
     >
       {props.children}
